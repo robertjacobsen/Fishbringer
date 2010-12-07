@@ -2,7 +2,7 @@ local FONT = select(1, GameFontNormalSmall:GetFont())
 local fb = CreateFrame"Frame"
 local db
 
-local name = string.format("%s - %s", UnitName"player", GetRealmName())
+local char = string.format("%s - %s", UnitName"player", GetRealmName())
 
 fb:RegisterEvent"ADDON_LOADED"
 fb:RegisterEvent"CHAT_MSG_SPELL_ITEM_ENCHANTMENTS"
@@ -107,11 +107,12 @@ local subzones = {
 local fishingpoles = { [6256] = true, [6365] = true, [6366] = true, [6367] = true, [12225] = true, [19022] = true, [19970] = true, [25978] = true, [44050] = true, }
 
 local fishingSkill, fishingBuff, fishCaught, fishToCatch = 0
+
 local function UpdateDatabase()
-	db[name].fishingSkill = fishingSkill
-	db[name].fishingBuff = fishingBuff
-	db[name].fishCaught = fishCaught
-	db[name].fishToCatch = fishToCatch
+	db[char].fishingSkill = fishingSkill
+	db[char].fishingBuff = fishingBuff
+	db[char].fishCaught = fishCaught
+	db[char].fishToCatch = fishToCatch
 end
 
 local function FishyFormula(r)
@@ -242,7 +243,7 @@ end
 local function GetSkill()
 	local _, _, _, fishing, _, _ = GetProfessions()
 	if (fishing) then
-		local name, _, rank, max, _, _, mod = GetProfessionInfo(fishing)
+		local name, _, rank, max, _, _, _, mod = GetProfessionInfo(fishing)
 		return name, rank, max, mod
 	end
 	return 0, 0, 0, 0
@@ -305,8 +306,8 @@ fb.ADDON_LOADED = function(self, event, addon)
 			FishbringerDB = db
 		end
 
-		if not db[name] then 
-			db[name] = {
+		if not db[char] then 
+			db[char] = {
 				fishingSkill = 0, 
 				fishingBuff = 0,
 				fishCaught = 0,
@@ -314,10 +315,10 @@ fb.ADDON_LOADED = function(self, event, addon)
 			}
 		end
 	
-		fishingSkill = db[name].fishingSkill
-		fishingBuff = db[name].fishingBuff
-		fishCaught = db[name].fishCaught
-		fishToCatch = db[name].fishToCatch
+		fishingSkill = db[char].fishingSkill
+		fishingBuff = db[char].fishingBuff
+		fishCaught = db[char].fishCaught
+		fishToCatch = db[char].fishToCatch
 
 		CheckPole()
 	end
