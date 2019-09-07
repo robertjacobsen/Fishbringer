@@ -1,8 +1,8 @@
-## Interface: 40000
+## Interface: 11302
 ## Title: Fishbringer
 ## Notes: The legendary Fishbringer, Guide of the Scarlet Highlord! Nat Pagle would be proud of you!
-## Author: Amnith
+## Author: Kalerath
 ## SavedVariables: FishbringerDB
-## Version: 4.0.3
+## Version: 1.13-1
 
 fishy.lua
