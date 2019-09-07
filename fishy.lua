@@ -153,13 +153,13 @@ local function UpdateCatchInfo()
 	if not zoneSkill then 
 		zoneText = GetRealZoneText()
 		zoneSkill = zones[zoneText]
+	end
 	
-		if not zoneSkill then
-			zoneSkill = 0
-			maxZoneSkill = 0
-		else
-			maxZoneSkill = zoneSkill + 95
-		end
+	if not zoneSkill then
+		zoneSkill = 0
+		maxZoneSkill = 0
+	else
+		maxZoneSkill = zoneSkill + 95
 	end
 
 	local chance = (
