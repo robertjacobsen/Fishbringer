@@ -451,11 +451,10 @@ fb.UNIT_INVENTORY_CHANGED = CheckForFishingPole
 
 local function ShowHelp()
 	Print("Nat Pagle would be proud of you.")
-	Print("Local variants:")
-	Print("- /fb show - Toggles visibility.")
-	Print("- /fb align - Cycles through text alignment.")
-	Print("- /fb count - Toggles fish count visibility.")
-	Print("- /fb reset - Resets the fish database.")
+	Print("- /fishbringer show - Toggles visibility.")
+	Print("- /fishbringer align - Cycles through text alignment.")
+	Print("- /fishbringer count - Toggles fish count visibility.")
+	Print("- /fishbringer reset - Resets the fish database.")
 end
 
 SlashCmdList["FISHBRINGER"] = function(arg)
