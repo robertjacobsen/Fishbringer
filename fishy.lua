@@ -228,7 +228,7 @@ local function UpdateSkill(forceResetFishCounter)
 	local fishNeeded = GetNumFishToLevel(skillRank)
 	if skillRank ~= skillMaxRank then 
 		skillRankText = string.format("%d/%d", skillRank, skillMaxRank)
-		fishNeededText = string.format("\n%d fish needed at this level", fishNeeded)
+		fishNeededText = string.format("\n%d fish needed to skill up", fishNeeded)
 	end
 
 	local skillModifierText = ""
