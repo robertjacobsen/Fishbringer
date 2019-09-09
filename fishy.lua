@@ -128,10 +128,10 @@ local function UpdateFishCount(shouldIncrement)
 	if shouldIncrement and IsFishingLoot() then
 		db[char].fishCaught = db[char].fishCaught + 1
 	end
+
 	Fishbringer.fishCount:SetFormattedText(
-		"%d of %d fish caught",
-		db[char].fishCaught,
-		db[char].fishToCatch
+		"%d fish caught at this level",
+		db[char].fishCaught
 	)
 end
 
@@ -148,13 +148,18 @@ end
 local function UpdateCatchInfo()
 	local zoneText = GetSubZoneText()
 	local zoneSkill = subzones[zoneText]
-	local maxZoneSkill
 
 	if not zoneSkill then 
 		zoneText = GetRealZoneText()
 		zoneSkill = zones[zoneText]
 	end
-	
+
+	-- Sometimes we can trigger this before the player is in any zone
+	if not zoneText then
+		return
+	end
+
+	local maxZoneSkill
 	if not zoneSkill then
 		zoneSkill = 0
 		maxZoneSkill = 0
@@ -195,57 +200,62 @@ local function UpdateCatchInfo()
 	Fishbringer.catchRate:SetFormattedText("%d%% catch rate", chance * 100)
 end
 
-local function UpdateSkill()
+local function GetFishingSkill()
+	for i = 1, GetNumSkillLines() do
+		local skillName, _, _, skillRank, _, skillModifier, skillMaxRank, _, _, _, _, _, _= GetSkillLineInfo(i)
+		if skillName == "Fishing" then 
+			return skillRank, skillModifier, skillMaxRank
+		end
+	end
+	return
+end
+
+local function UpdateSkill(forceResetFishCounter)
 	if not db then 
 		return
 	end
-	local skillName, skillRank, skillModifier, skillMaxRank
-	local found = false
-	for i = 1, GetNumSkillLines() do
-		skillName, _, _, skillRank, _, skillModifier, skillMaxRank, _, _, _, _, _, _= GetSkillLineInfo(i)
-		if skillName == "Fishing" then 
-			found = true
-			break
-		end
+	local skillRank, skillModifier, skillMaxRank = GetFishingSkill()
+
+	if not skillRank then
+		return
 	end
-	if found then
-		local fishNeeded = GetNumFishToLevel(skillRank)
-		if skillRank ~= skillMaxRank then 
-			local skillModifierText = ""
-			if skillModifier > 0 then
-				skillModifierText = string.format("(+%d)", skillModifier)
-			end
-			Fishbringer.content:SetFormattedText(
-				"%d%s/%d fishing skill\n%d fish needed at this level",
-				skillRank,
-				skillModifierText,
-				skillMaxRank,
-				fishNeeded
-			)
-		else
-			local skillModifierText = ""
-			if skillModifier > 0 then
-				skillModifierText = string.format("(+%d)", skillModifier)
-			end
-			Fishbringer.content:SetFormattedText(
-				"%d%s fishing skill",
-				skillRank,
-				skillModifierText
-			)
-		end
-		if db[char].fishingSkill ~= skillRank then
-			db[char].fishingSkill = skillRank
-			ResetFishCounter(fishNeeded)
-		end
-		if db[char].fishingBuff ~= skillModifier then
-			db[char].fishingBuff = skillModifier
-			UpdateCatchInfo()
-		end
+
+	db[char].maxFishingSkill = skillMaxRank
+
+	local fishNeededText = ""
+	local skillRankText = skillRank
+
+	local fishNeeded = GetNumFishToLevel(skillRank)
+	if skillRank ~= skillMaxRank then 
+		skillRankText = string.format("%d/%d", skillRank, skillMaxRank)
+		fishNeededText = string.format("\n%d fish needed at this level", fishNeeded)
+	end
+
+	local skillModifierText = ""
+	if skillModifier > 0 then
+		skillModifierText = string.format(" (+%d)", skillModifier)
+	end
+		
+	Fishbringer.content:SetFormattedText(
+		"%s%s fishing skill%s",
+		skillRankText,
+		skillModifierText,
+		fishNeededText
+	)
+
+	if forceResetFishCounter or db[char].fishingSkill ~= skillRank then
+		db[char].fishingSkill = skillRank
+		ResetFishCounter(fishNeeded)
+	end
+	
+	if db[char].fishingBuff ~= skillModifier then
+		db[char].fishingBuff = skillModifier
+		UpdateCatchInfo()
 	end
 end
 
 local function Update()
-	UpdateSkill()
+	UpdateSkill(false)
 	UpdateCatchInfo()
 end
 
@@ -300,19 +310,20 @@ local function CheckForFishingPole()
 	end
 end
 
-local function InitializeDB()
+local function InitializeDB(resetDatabase)
 	db = FishbringerDB
 	if not db then 
 		db = {}
 		FishbringerDB = db
 	end
 
-	if not db[char] then 
+	if resetDatabase or not db[char] then 
 		db[char] = {
 			fishingSkill = 0, 
 			fishingBuff = 0,
 			fishCaught = 0,
 			fishToCatch = 0,
+			maxFishingSkill = 0,
 			isShown = false,
 			isFishCountShown = true,
 			alignment = "RIGHT"
@@ -322,6 +333,9 @@ end
 
 local function InitializeFrame()
 	-- Frame madness
+	if Fishbringer then
+		return
+	end
 	Fishbringer = CreateFrame("Frame", "Fishbringer", UIParent)
 	Fishbringer:EnableMouse(true)
 	Fishbringer:SetMovable(true)
@@ -413,12 +427,16 @@ local function InitializeFrame()
 	end
 end
 
+function UpdateFishingSkill()
+	return UpdateSkill(false)
+end
+
 fb:SetScript("OnEvent", function(self, event, ...)
 	self[event](self, event, ...)
 end)
 
 fb.PLAYER_ENTERING_WORLD = function()
-	InitializeDB()
+	InitializeDB(false)
 	InitializeFrame()
 	CheckForFishingPole()
 	UpdateFishCount(false)
@@ -437,6 +455,7 @@ local function ShowHelp()
 	Print("- /fb show - Toggles visibility.")
 	Print("- /fb align - Cycles through text alignment.")
 	Print("- /fb count - Toggles fish count visibility.")
+	Print("- /fb reset - Resets the fish database.")
 end
 
 SlashCmdList["FISHBRINGER"] = function(arg)
@@ -446,6 +465,11 @@ SlashCmdList["FISHBRINGER"] = function(arg)
 		return Toggle()
 	elseif arg == "count" then
 		return ToggleFishCount()
+	elseif arg == "reset" then
+		InitializeDB(true)
+		UpdateSkill(true)
+		UpdateCatchInfo()
+		return
 	end
 	return ShowHelp()
 end
