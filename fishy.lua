@@ -5,6 +5,7 @@ local db
 local char = string.format("%s - %s", UnitName"player", GetRealmName())
 
 fb:RegisterEvent"PLAYER_ENTERING_WORLD"
+fb:RegisterEvent"ADDON_LOADED"
 fb:RegisterEvent"COMBAT_LOG_EVENT"
 fb:RegisterEvent"SKILL_LINES_CHANGED"
 fb:RegisterEvent"LOOT_OPENED"
@@ -298,7 +299,6 @@ local function ToggleFishCount()
 end
 
 local function CheckForFishingPole() 
-
 	local _, _, itemid = string.find(GetInventoryItemLink("player", GetInventorySlotInfo("MainHandSlot")) or "", "item:(%d+):(.+)")
 	if db[char].isShown or fishingpoles[tonumber(itemid)] then
 		Update()
@@ -339,7 +339,7 @@ local function InitializeFrame()
 	Fishbringer = CreateFrame("Frame", "Fishbringer", UIParent)
 	Fishbringer:EnableMouse(true)
 	Fishbringer:SetMovable(true)
-	Fishbringer:SetUserPlaced(false)
+	Fishbringer:SetUserPlaced(true)
 	Fishbringer:SetHeight(150)
 	Fishbringer:SetWidth(185)
 	Fishbringer:SetBackdrop({
@@ -436,10 +436,16 @@ fb:SetScript("OnEvent", function(self, event, ...)
 end)
 
 fb.PLAYER_ENTERING_WORLD = function()
-	InitializeDB(false)
-	InitializeFrame()
 	CheckForFishingPole()
 	UpdateFishCount(false)
+end
+
+fb.ADDON_LOADED = function(self, event, addon)
+	if addon ~= "Fishbringer" then
+		return
+	end
+	InitializeDB(false)
+	InitializeFrame()
 end
 
 fb.COMBAT_LOG_EVENT = UpdateSkill

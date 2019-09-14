@@ -3,6 +3,6 @@
 ## Notes: The legendary Fishbringer, Guide of the Scarlet Highlord! Nat Pagle would be proud of you!
 ## Author: Kalerath
 ## SavedVariables: FishbringerDB
-## Version: 1.13-2
+## Version: 1.13-3
 
 fishy.lua
