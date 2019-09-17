@@ -224,25 +224,25 @@ local function UpdateSkill(forceResetFishCounter)
 	db[char].maxFishingSkill = skillMaxRank
 
 	local fishNeededText = ""
-	local skillRankText = skillRank
 
 	local fishNeeded = GetNumFishToLevel(skillRank)
 	if skillRank ~= skillMaxRank then 
-		skillRankText = string.format("%d/%d", skillRank, skillMaxRank)
 		fishNeededText = string.format("\n%d fish needed to skill up", fishNeeded)
 	end
 
 	local skillModifierText = ""
 	if skillModifier > 0 then
-		skillModifierText = string.format(" (+%d)", skillModifier)
+		skillModifierText = string.format(" (%d+%d)", skillRank, skillModifier)
 	end
 		
 	Fishbringer.content:SetFormattedText(
-		"%s%s fishing skill%s",
-		skillRankText,
+		"%s%s / %s fishing skill%s",
+		skillRank+skillModifier,
 		skillModifierText,
+		skillMaxRank,
 		fishNeededText
 	)
+	
 
 	if forceResetFishCounter or db[char].fishingSkill ~= skillRank then
 		db[char].fishingSkill = skillRank
@@ -341,7 +341,7 @@ local function InitializeFrame()
 	Fishbringer:SetMovable(true)
 	Fishbringer:SetUserPlaced(true)
 	Fishbringer:SetHeight(150)
-	Fishbringer:SetWidth(185)
+	Fishbringer:SetWidth(250)
 	Fishbringer:SetBackdrop({
 		bgFile = "Interface\\ChatFrame\\ChatFrameBackground", 
 		tile = true, 
