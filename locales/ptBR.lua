@@ -5,7 +5,7 @@ L["Fish caught this level"] = "%d peixes cap. nesse level"
 L["Skill needed"] = "\124c%s%s\124r\n%d habilidade necessária\n(%d necessários para 100%% de sucesso)"
 L["Catch rate"] = "%d%% taxa de sucesso"
 L["Fish needed to skill up"] = "\n%d peixes necessários para upar"
-L["fishing skill"] = "%s%s habilidade de pesca"
+L["fishing skill"] = "%s%s habilidade de pesca%s"
 
 --Zone names
 L["Dun Morogh"] = "Dun Morogh"
