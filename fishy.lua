@@ -4,6 +4,9 @@ local fb = CreateFrame"Frame"
 local db
 local char = string.format("%s - %s", UnitName"player", GetRealmName())
 
+-- LOCALIZATION
+local L = LibStub("AceLocale-3.0"):GetLocale("Fishbringer")
+
 fb:RegisterEvent"PLAYER_ENTERING_WORLD"
 fb:RegisterEvent"ADDON_LOADED"
 fb:RegisterEvent"COMBAT_LOG_EVENT"
@@ -18,76 +21,76 @@ local function Print(text)
 end
 
 local zones = {
-	["Dun Morogh"] = -70, 
-	["Durotar"] = -70, 
-	["Elwynn Forest"] = -70, 
-	["Mulgore"] = -70,
-	["Eversong Forest"] = -70, 
-	["Azuremyst Isle"] = -70, 
-	["Teldrassil"]  = -70, 
-	["Tirisfal Glades"] = -70, 
-	["Orgrimmar"] = -20, 
-	["Ironforge"] = -20, 
-	["Stormwind City"] = -20, 
-	["Thunder Bluff"] = -20, 
-	["Silvermoon City"] = -20, 
-	["The Exodar"] = -20, 
-	["Darnassus"] = -20, 
-	["Undercity"] = -20, 
-	["The Barrens"] = -20, 
-	["Blackfathom Deeps"] = -20, 
-	["Bloodmyst Isle"] = -20, 
-	["Darkshore"] = -20, 
-	["The Deadmines"] = -20, 
-	["Ghostlands"] = -20, 
-	["Loch Modan"] = -20, 
-	["Silverpine Forest"] = -20, 
-	["The Wailing Caverns"] = -20, 
-	["Westfall"] = -20, 
-	["Ashenvale"] = 55, 
-	["Duskwood"] = 55, 
-	["Hillsbrad Foothills"] = 55, 
-	["Redridge Mountains"] = 55, 
-	["Stonetalon Mountains"] = 55, 
-	["Wetlands"] = 55, 
-	["Alterac Mountains"] = 130, 
-	["Arathi Highlands"] = 130, 
-	["Desolace"] = 130, 
-	["Dustwallow Marsh"] = 130, 
-	["Scarlet Monastery"] = 130, 
-	["Stranglethorn Vale"] = 130, 
-	["Swamp of Sorrows"] = 130, 
-	["Thousand Needles"] = 130, 
-	["Azshara"] = 205, 
-	["Felwood"] = 205,
-	["Feralas"] = 205, 
-	["The Hinterlands"] = 205, 
-	["Maraudon"] = 205, 
-	["Moonglade"] = 205,
-	["Tanaris"] = 205, 
-	["The Temple of Atal'Hakkar"] = 205, 
-	["Un'Goro Crater"] = 205, 
-	["Western Plaguelands"] = 205, 
-	["Shadowmoon Valley"] = 280,
-	["Zangarmarsh"] = 305, 
-	["Burning Steppes"] = 330, 
-	["Deadwind Pass"] = 330, 
-	["Eastern Plaguelands"] = 330, 
-	["Scholomance"] = 330, 
-	["Silithus"] = 330, 
-	["Stratholme"] = 330, 
-	["Winterspring"] = 330, 
-	["Zul'Gurub"] = 330, 
-	["Terokkar Forest"] = 355,
-	["Nagrand"] = 380, 
-	["Netherstorm"] = 380,
-	["Borean Tundra"] = 380, 
-	["Dragonblight"] = 380, 
-	["Howling Fjord"] = 380, 
-	["Crystalsong Forest"] = 405,
-	["Dalaran"] = 430, 
-	["Sholazar Basin"] = 430, 
-	["The Frozen Sea"] = 480,
+	[L["Dun Morogh"]] = -70, 
+	[L["Durotar"]] = -70, 
+	[L["Elwynn Forest"]] = -70, 
+	[L["Mulgore"]] = -70,
+	[L["Eversong Forest"]] = -70, 
+	[L["Azuremyst Isle"]] = -70, 
+	[L["Teldrassil"]]  = -70, 
+	[L["Tirisfal Glades"]] = -70, 
+	[L["Orgrimmar"]] = -20, 
+	[L["Ironforge"]] = -20, 
+	[L["Stormwind City"]] = -20, 
+	[L["Thunder Bluff"]] = -20, 
+	[L["Silvermoon City"]] = -20, 
+	[L["The Exodar"]] = -20, 
+	[L["Darnassus"]] = -20, 
+	[L["Undercity"]] = -20, 
+	[L["The Barrens"]] = -20, 
+	[L["Blackfathom Deeps"]] = -20, 
+	[L["Bloodmyst Isle"]] = -20, 
+	[L["Darkshore"]] = -20, 
+	[L["The Deadmines"]] = -20, 
+	[L["Ghostlands"]] = -20, 
+	[L["Loch Modan"]] = -20, 
+	[L["Silverpine Forest"]] = -20, 
+	[L["The Wailing Caverns"]] = -20, 
+	[L["Westfall"]] = -20, 
+	[L["Ashenvale"]] = 55, 
+	[L["Duskwood"]] = 55, 
+	[L["Hillsbrad Foothills"]] = 55, 
+	[L["Redridge Mountains"]] = 55, 
+	[L["Stonetalon Mountains"]] = 55, 
+	[L["Wetlands"]] = 55, 
+	[L["Alterac Mountains"]] = 130, 
+	[L["Arathi Highlands"]] = 130, 
+	[L["Desolace"]] = 130, 
+	[L["Dustwallow Marsh"]] = 130, 
+	[L["Scarlet Monastery"]] = 130, 
+	[L["Stranglethorn Vale"]] = 130, 
+	[L["Swamp of Sorrows"]] = 130, 
+	[L["Thousand Needles"]] = 130, 
+	[L["Azshara"]] = 205, 
+	[L["Felwood"]] = 205,
+	[L["Feralas"]] = 205, 
+	[L["The Hinterlands"]] = 205, 
+	[L["Maraudon"]] = 205, 
+	[L["Moonglade"]] = 205,
+	[L["Tanaris"]] = 205, 
+	[L["The Temple of Atal'Hakkar"]] = 205, 
+	[L["Un'Goro Crater"]] = 205, 
+	[L["Western Plaguelands"]] = 205, 
+	[L["Shadowmoon Valley"]] = 280,
+	[L["Zangarmarsh"]] = 305, 
+	[L["Burning Steppes"]] = 330, 
+	[L["Deadwind Pass"]] = 330, 
+	[L["Eastern Plaguelands"]] = 330, 
+	[L["Scholomance"]] = 330, 
+	[L["Silithus"]] = 330, 
+	[L["Stratholme"]] = 330, 
+	[L["Winterspring"]] = 330, 
+	[L["Zul'Gurub"]] = 330, 
+	[L["Terokkar Forest"]] = 355,
+	[L["Nagrand"]] = 380, 
+	[L["Netherstorm"]] = 380,
+	[L["Borean Tundra"]] = 380, 
+	[L["Dragonblight"]] = 380, 
+	[L["Howling Fjord"]] = 380, 
+	[L["Crystalsong Forest"]] = 405,
+	[L["Dalaran"]] = 430, 
+	[L["Sholazar Basin"]] = 430, 
+	[L["The Frozen Sea"]] = 480,
 }
 local subzones = {
 	["Jaguero Isle"] = 205, 
@@ -131,7 +134,7 @@ local function UpdateFishCount(shouldIncrement)
 	end
 
 	Fishbringer.fishCount:SetFormattedText(
-		"%d fish caught at this level",
+		L["Fish caught this level"],
 		db[char].fishCaught
 	)
 end
@@ -195,10 +198,10 @@ local function UpdateCatchInfo()
 		color = "ff40bf40"
 	end
 	Fishbringer.zoneInfo:SetFormattedText(
-		"\124c%s%s\124r\n%d skill needed to fish\n(%d needed for 100%% catch rate)",
+		L["Skill needed"],
 		color, zoneText, zoneSkill, maxZoneSkill, chance * 100
 	)
-	Fishbringer.catchRate:SetFormattedText("%d%% catch rate", chance * 100)
+	Fishbringer.catchRate:SetFormattedText(L["Catch rate"], chance * 100)
 end
 
 local function GetFishingSkill()
@@ -229,7 +232,7 @@ local function UpdateSkill(forceResetFishCounter)
 	local fishNeeded = GetNumFishToLevel(skillRank)
 	if skillRank ~= skillMaxRank then 
 		skillRankText = string.format("%d/%d", skillRank, skillMaxRank)
-		fishNeededText = string.format("\n%d fish needed to skill up", fishNeeded)
+		fishNeededText = string.format(L["Fish needed to skill up"], fishNeeded)
 	end
 
 	local skillModifierText = ""
@@ -238,7 +241,7 @@ local function UpdateSkill(forceResetFishCounter)
 	end
 		
 	Fishbringer.content:SetFormattedText(
-		"%s%s fishing skill%s",
+		L["fishing skill"],
 		skillRankText,
 		skillModifierText,
 		fishNeededText

@@ -1,8 +1,11 @@
 ## Interface: 11302
 ## Title: Fishbringer
 ## Notes: The legendary Fishbringer, Guide of the Scarlet Highlord! Nat Pagle would be proud of you!
+## Notes-ptBR: O lendário Fishbringer, Guia do Grão-lorde Escarlate! Nat Pagle ficaria orgulhoso de você!
 ## Author: Kalerath
 ## SavedVariables: FishbringerDB
 ## Version: 1.13-3
 
+embeds.xml
+locales\locales.xml
 fishy.lua
