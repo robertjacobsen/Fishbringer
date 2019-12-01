@@ -1,6 +1,6 @@
 ## Interface: 11302
 ## Title: Fishbringer
-## Title-deDR: Fishbringer
+## Title-deDE: Fishbringer
 ## Notes: The legendary Fishbringer, Guide of the Scarlet Highlord! Nat Pagle would be proud of you!
 ## Notes-deDE: Das legendäre Fishbringer, Leitfaden des Scharlachroten Hochlords! Nat Pagle wäre stolz auf dich!
 ## Author: Kalerath
