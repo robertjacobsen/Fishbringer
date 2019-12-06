@@ -9,5 +9,6 @@
 
 localization.core.lua
 Localization.deDE.lua
+Localization.ruRU.lua
 fishy.lua
 

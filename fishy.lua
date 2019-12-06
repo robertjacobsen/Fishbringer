@@ -305,7 +305,7 @@ end
 
 local function CheckForFishingPole() 
 	local _, _, itemid = string.find(GetInventoryItemLink("player", GetInventorySlotInfo("MainHandSlot")) or "", "item:(%d+):(.+)")
-	if db[char].isShown or fishingpoles[tonumber(itemid)] then
+	if fishingpoles[tonumber(itemid)] then
 		Update()
 		Fishbringer:Show()
 		db[char].isShown = true
