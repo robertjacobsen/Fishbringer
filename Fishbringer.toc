@@ -1,9 +1,11 @@
 ## Interface: 11302
 ## Title: Fishbringer
 ## Title-deDE: Fishbringer
+## Title-ruRU: 
 ## Notes: The legendary Fishbringer, Guide of the Scarlet Highlord! Nat Pagle would be proud of you!
 ## Notes-deDE: Das legendäre Fishbringer, Leitfaden des Scharlachroten Hochlords! Nat Pagle wäre stolz auf dich!
-## Author: Kalerath
+## Notes-ruRU:
+## Author: Kalerath, Godot-Fye (German Localization), leafoe (Russian Localizatin)
 ## SavedVariables: FishbringerDB
 ## Version: 1.13-3
 
