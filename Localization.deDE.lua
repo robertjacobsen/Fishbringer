@@ -17,11 +17,15 @@ if namespace.locale == "deDE" then
     L["\n%d fish needed to skill up"] = "\n%d Fische benötigt für Skillpunkt"
     L["%d fish caught at this level"] = "%d Fische auf diesem Level gefangen"
 
+	-- Name des Angelperks / Name of the Fishingperk
+
     L["Fishing"] = "Angeln"
+
+	-- Login Message
 
     L["Pack yer bags, we be leavin' fer fishin'!"] = "Pack deine Taschen, wir gehen angeln!"
 
-    -- Angelzonen
+    -- Angelzonen / Fishingzones
 
     L["Dun Morogh"] = "Dun Morogh"
 	L["Durotar"] = "Durotar"
@@ -92,7 +96,6 @@ if namespace.locale == "deDE" then
 	L["Crystalsong Forest"] = "Kristallsangwald"
 	L["Dalaran"] = "Dalaran" 
 	L["Sholazar Basin"] = "Sholazarbecken" 
-	L["The Frozen Sea"] = ""
-
+	L["The Frozen Sea"] = "Die gefrorene See"
 
 return end
