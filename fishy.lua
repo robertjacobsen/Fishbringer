@@ -252,6 +252,7 @@ local function UpdateSkill(forceResetFishCounter)
 	if forceResetFishCounter or db[char].fishingSkill ~= skillRank then
 		db[char].fishingSkill = skillRank
 		ResetFishCounter(fishNeeded)
+		UpdateCatchInfo()
 	end
 	
 	if db[char].fishingBuff ~= skillModifier then
@@ -466,6 +467,44 @@ local function ShowHelp()
 	Print(L["- /fishbringer align - Cycles through text alignment."])
 	Print(L["- /fishbringer count - Toggles fish count visibility."])
 	Print(L["- /fishbringer reset - Resets the fish database."])
+
+	--[[local FishbringerUI = {}
+
+	local FishbringerUI = CreateFrame("Frame", "FishbringerUI", UIParent, "BasicFrameTemplateWithInset")
+	FishbringerUI:SetSize(300, 400);
+	FishbringerUI:SetPoint("Center", UIParent, "Center");
+	FishbringerUI:EnableMouse(true);
+	FishbringerUI:SetMovable(true);
+	FishbringerUI:RegisterForDrag("LeftButton")
+	FishbringerUI:SetScript("OnDragStart", FishbringerUI.StartMoving)
+	FishbringerUI:SetScript("OnDragStop", FishbringerUI.StopMovingOrSizing)
+	FishbringerUI:Show();
+
+	FishbringerUI.title = FishbringerUI:CreateFontString(nil, "Overlay");
+	FishbringerUI.title:SetFontObject("GameFontHighlight");
+	FishbringerUI.title:SetPoint("Center", FishbringerUI.TitleBg, "Center", 5, 0);
+	FishbringerUI.title:SetText("|cFF00FF00Fishbringer v1.13.4");
+
+	MoveableWindowButton = CreateFrame("CheckButton", "MoveableWindowButton_GlobalName", FishbringerUI, "ChatConfigCheckButtonTemplate");
+	MoveableWindowButton:SetPoint("TOPLEFT", 10, -60);
+	MoveableWindowButton_GlobalNameText:SetText("Window Moveable");
+	MoveableWindowButton.tooltip = "Let's move the Window...or not?";
+	MoveableWindowButton:SetScript("OnClick", 
+	  function()
+		--FishbringerUI:SetMovable(false)
+	  end
+	);
+
+	ToggleButton = CreateFrame("CheckButton", "ToggleButton_GlobalName", FishbringerUI, "ChatConfigCheckButtonTemplate");
+	ToggleButton:SetPoint("TOPLEFT", 10, -30);
+	ToggleButton_GlobalNameText:SetText("Show/Hide the Fishing Widget");
+	ToggleButton.tooltip = "Toggles the Widget visibility.";
+	ToggleButton:SetScript("OnClick", 
+	  function()
+		Toggle();
+	  end
+	); --]]
+
 end
 
 SlashCmdList["FISHBRINGER"] = function(arg)
@@ -483,9 +522,11 @@ SlashCmdList["FISHBRINGER"] = function(arg)
 	end
 	return ShowHelp()
 end
+
 SLASH_FISHBRINGER1 = "/fishbringer"
 -- Hail to Fishing Buddy!
-if not select(4, GetAddOnInfo"Fishing Buddy") then
+if not select(4, GetAddOnInfo"FishingBuddy") then
 	SLASH_FISHBRINGER2 = "/fb"
 end
+
 Print(L["Pack yer bags, we be leavin' fer fishin'!"])

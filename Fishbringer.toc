@@ -5,9 +5,9 @@
 ## Notes: The legendary Fishbringer, Guide of the Scarlet Highlord! Nat Pagle would be proud of you!
 ## Notes-deDE: Das legendäre Fishbringer, Leitfaden des Scharlachroten Hochlords! Nat Pagle wäre stolz auf dich!
 ## Notes-ruRU: The legendary Fishbringer, Guide of the Scarlet Highlord! Nat Pagle would be proud of you!
-## Author: Kalerath, Fye (German Localization), leafoe (Russian Localization)
+## Author: Kalerath, Fye (Localization Code & Bugfixes), leafoe (Russian Localization)
 ## SavedVariables: FishbringerDB
-## Version: 1.13-3
+## Version: 1.13-4
 
 localization.core.lua
 Localization.deDE.lua

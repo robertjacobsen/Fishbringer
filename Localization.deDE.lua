@@ -59,7 +59,7 @@ if namespace.locale == "deDE" then
 	L["Redridge Mountains"] = "Rotkammgebirge"
 	L["Stonetalon Mountains"] = "Steinkrallengebirge" 
 	L["Wetlands"] = "Sumpfland"
-	L["Alterac Mountains"] = "Alteractal" 
+	L["Alterac Mountains"] = "Alteracgebirge" 
 	L["Arathi Highlands"] = "Arathihochland"
 	L["Desolace"] = "Desolace"
 	L["Dustwallow Marsh"] = "Marschen von Dustwallow"
