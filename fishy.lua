@@ -74,7 +74,7 @@ local zones = {
 	[L["Un'Goro Crater"]] = 205, 
 	[L["Western Plaguelands"]] = 205, 
 	[L["Shadowmoon Valley"]] = 280,
-	[L["Zangarmarsh"]] = 305, 
+	[L["Zangarmarsh"]] = 305, -- Burning Crusade 
 	[L["Burning Steppes"]] = 330, 
 	[L["Deadwind Pass"]] = 330, 
 	[L["Eastern Plaguelands"]] = 330, 
@@ -86,6 +86,7 @@ local zones = {
 	[L["Terokkar Forest"]] = 355,
 	[L["Nagrand"]] = 380, 
 	[L["Netherstorm"]] = 380,
+	-- Wrath of the Lich King
 	[L["Borean Tundra"]] = 380, 
 	[L["Dragonblight"]] = 380, 
 	[L["Howling Fjord"]] = 380, 
@@ -100,14 +101,14 @@ local subzones = {
 	["Hetaera's Clutch"] = 330, 
 	["Scalebeard's Cave"] = 330, 
 	["Jademir Lake"] = 330, 
-	["Marshlight Lake"] = 355, 
-	["Sporewind Lake"] = 355,
-	["Serpent Lake"] = 355, 
-	["Lake Sunspring"] = 395,
-	["Skysong Lake"] = 395, 
-	["Blackwind Lake"] = 405,
-	["Lake Ere'Noru"] = 405, 
-	["Lake Jorune"] = 405,
+	[L["Marshlight Lake"]] = 355, 
+	[L["Sporewind Lake"]] = 355,
+	[L["Serpent Lake"]] = 355, 
+	[L["Lake Sunspring"]] = 395,
+	[L["Skysong Lake"]] = 395, 
+	[L["Blackwind Lake"]] = 405,
+	[L["Lake Ere'Noru"]] = 405, 
+	[L["Lake Jorune"]] = 405,
 }
 
 local fishingpoles = { 
@@ -342,12 +343,12 @@ local function InitializeFrame()
 	if Fishbringer then
 		return
 	end
-	Fishbringer = CreateFrame("Frame", "Fishbringer", UIParent)
+	local Fishbringer = CreateFrame("Frame", "Fishbringer", UIParent, "BackdropTemplate")
 	Fishbringer:EnableMouse(true)
 	Fishbringer:SetMovable(true)
 	Fishbringer:SetUserPlaced(true)
 	Fishbringer:SetHeight(150)
-	Fishbringer:SetWidth(185)
+	Fishbringer:SetWidth(250)
 	Fishbringer:SetBackdrop({
 		bgFile = "Interface\\ChatFrame\\ChatFrameBackground", 
 		tile = true, 
@@ -467,17 +468,35 @@ local function ShowHelp()
 	Print(L["- /fishbringer align - Cycles through text alignment."])
 	Print(L["- /fishbringer count - Toggles fish count visibility."])
 	Print(L["- /fishbringer reset - Resets the fish database."])
+end
 
-	--[[local FishbringerUI = {}
+local function FishbringerMenu()
 
+	--[[
+	if FishrbingerUI then
+		return
+	end
+	
 	local FishbringerUI = CreateFrame("Frame", "FishbringerUI", UIParent, "BasicFrameTemplateWithInset")
 	FishbringerUI:SetSize(300, 400);
 	FishbringerUI:SetPoint("Center", UIParent, "Center");
 	FishbringerUI:EnableMouse(true);
-	FishbringerUI:SetMovable(true);
+	FishbringerUI:SetMovable(false);
 	FishbringerUI:RegisterForDrag("LeftButton")
 	FishbringerUI:SetScript("OnDragStart", FishbringerUI.StartMoving)
 	FishbringerUI:SetScript("OnDragStop", FishbringerUI.StopMovingOrSizing)
+	FishbringerUI:SetBackdrop({
+		bgFile = "Interface\\ChatFrame\\ChatFrameBackground", 
+		tile = true, 
+		tileSize = 16, 
+		insets = {
+			left = 4, 
+			right = 4, 
+			top = 4,
+			bottom = 4
+		},
+	})
+	FishbringerUI:SetBackdropColor(0, 0, 0, .6) 
 	FishbringerUI:Show();
 
 	FishbringerUI.title = FishbringerUI:CreateFontString(nil, "Overlay");
@@ -485,17 +504,23 @@ local function ShowHelp()
 	FishbringerUI.title:SetPoint("Center", FishbringerUI.TitleBg, "Center", 5, 0);
 	FishbringerUI.title:SetText("|cFF00FF00Fishbringer v1.13.4");
 
-	MoveableWindowButton = CreateFrame("CheckButton", "MoveableWindowButton_GlobalName", FishbringerUI, "ChatConfigCheckButtonTemplate");
-	MoveableWindowButton:SetPoint("TOPLEFT", 10, -60);
-	MoveableWindowButton_GlobalNameText:SetText("Window Moveable");
-	MoveableWindowButton.tooltip = "Let's move the Window...or not?";
-	MoveableWindowButton:SetScript("OnClick", 
+	tinsert(UISpecialFrames, FishbringerUI:GetName())
+
+	local MoveButton = CreateFrame("CheckButton", "MoveButton_GlobalName", FishbringerUI, "ChatConfigCheckButtonTemplate");
+	MoveButton:SetPoint("TOPLEFT", 10, -60);
+	MoveButton_GlobalNameText:SetText("Window Moveable");
+	MoveButton.tooltip = "Let's move the Window...or not?";
+	MoveButton:SetScript("OnClick", 
 	  function()
-		--FishbringerUI:SetMovable(false)
+		if FishbringerUI:IsMovable == false then
+			FishbringerUI:SetMovable(true)
+		else
+			FishbringerUI:SetMovable(false)
+		end
 	  end
 	);
 
-	ToggleButton = CreateFrame("CheckButton", "ToggleButton_GlobalName", FishbringerUI, "ChatConfigCheckButtonTemplate");
+	local ToggleButton = CreateFrame("CheckButton", "ToggleButton_GlobalName", FishbringerUI, "ChatConfigCheckButtonTemplate");
 	ToggleButton:SetPoint("TOPLEFT", 10, -30);
 	ToggleButton_GlobalNameText:SetText("Show/Hide the Fishing Widget");
 	ToggleButton.tooltip = "Toggles the Widget visibility.";
@@ -504,7 +529,6 @@ local function ShowHelp()
 		Toggle();
 	  end
 	); --]]
-
 end
 
 SlashCmdList["FISHBRINGER"] = function(arg)

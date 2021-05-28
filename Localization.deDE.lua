@@ -68,7 +68,7 @@ if namespace.locale == "deDE" then
 	L["Swamp of Sorrows"] = "Sümpfe des Elends"
 	L["Thousand Needles"] = "Tausend Nadeln"
 	L["Azshara"] = "Azshara"
-	L["Teufelswald"] = "Felwood"
+	L["Felwood"] = "Teufelswald"
 	L["Feralas"] = "Feralas"
 	L["The Hinterlands"] = "Hinterland"
 	L["Maraudon"] = "Maraudon"
@@ -78,7 +78,6 @@ if namespace.locale == "deDE" then
 	L["Un'Goro Crater"] = "Un'Goro-Krater"
 	L["Western Plaguelands"] = "Westliche Pestländer" 
 	L["Shadowmoon Valley"] = "Schattenmondtal"
-	L["Zangarmarsh"] = "Zangarmarschen"
 	L["Burning Steppes"] = "Brennende Steppe"
 	L["Deadwind Pass"] = "Gebirgspass der Todenwinde"
 	L["Eastern Plaguelands"] = "Östliche Pestländer" 
@@ -87,9 +86,20 @@ if namespace.locale == "deDE" then
 	L["Stratholme"] = "Stratholme"
 	L["Winterspring"] = "Winterspring" 
 	L["Zul'Gurub"] = "Zul'Gurub"
+	--- Burning Crusade
 	L["Terokkar Forest"] = "Wälder von Terokkar"
 	L["Nagrand"] = "Nagrand"
 	L["Netherstorm"] = "Nethersturm"
+	L["Zangarmarsh"] = "Zangarmarschen"
+	-- Burning Crusade Subzones
+	L["Lake Sunspring"] = "Lake Sunspring" -- Nagrand
+	L["Marshlight Lake"] = "Sumpflichtsee" -- Zangarmarschen
+	L["Sporewind Lake"] = "Sporenwindsee" -- Zangarmarschen
+	L["Serpent Lake"] = "Schlangensee" -- Zangarmarschen
+	L["Blackwind Lake"] = "Schattenwindsee" -- Wälder von Terokarr
+	L["Lake Ere'Noru"] = "See von Ere'Noru" -- Wälder von Terokarr 
+	L["Lake Jorune"] = "Jorunsee" -- Wälder von Terokarr
+	--- WOTLK
 	L["Borean Tundra"] = "Boreanische Tundra" 
 	L["Dragonblight"] = "Drachenöde"
 	L["Howling Fjord"] = "Heulende Fjord" 

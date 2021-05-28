@@ -77,7 +77,6 @@ if namespace.locale == "ruRU" then
 	L["Un'Goro Crater"] = "Кратер Ун'Горо"
 	L["Western Plaguelands"] = "Западные Чумные земли" 
 	L["Shadowmoon Valley"] = "Долина Призрачной Луны"
-	L["Zangarmarsh"] = "Зангартопь"
 	L["Burning Steppes"] = "Пылающие степи"
 	L["Deadwind Pass"] = "Перевал Мертвого Ветра"
 	L["Eastern Plaguelands"] = "Восточные Чумные земли" 
@@ -86,16 +85,27 @@ if namespace.locale == "ruRU" then
 	L["Stratholme"] = "Стратхольм"
 	L["Winterspring"] = "Зимние Ключи" 
 	L["Zul'Gurub"] = "Зул'Гуруб"
+	-- The Burning Crusade
 	L["Terokkar Forest"] = "Лес Тероккар"
 	L["Nagrand"] = "Награнд"
 	L["Netherstorm"] = "Пустоверть"
+	L["Zangarmarsh"] = "Зангартопь"
+	-- Burning Crusade Subzones
+	L["Lake Sunspring"] = "Озеро Солнечного Источника" -- Nagrand
+	L["Marshlight Lake"] = "Озеро Болотных Огоньков" -- Zangarmarschen
+	L["Sporewind Lake"] = "Озеро Спороветра" -- Zangarmarschen
+	L["Serpent Lake"] = "Змеиное озеро" -- Zangarmarschen
+	L["Blackwind Lake"] = "Озеро Черного Ветра" -- Wälder von Terokarr
+	L["Lake Ere'Noru"] = "Озеро Эре'Нору" -- Wälder von Terokarr 
+	L["Lake Jorune"] = "Озеро Иорун" -- Wälder von Terokarr
+	-- Wrath of the Lich King
 	L["Borean Tundra"] = "Борейская тундра" 
 	L["Dragonblight"] = "Драконий Погост"
 	L["Howling Fjord"] = "Ревущий фьорд" 
 	L["Crystalsong Forest"] = "Лес Хрустальной Песни"
 	L["Dalaran"] = "Даларан" 
 	L["Sholazar Basin"] = "Низина Шолазар" 
-	L["The Frozen Sea"] = "The Frozen Sea"
+	L["The Frozen Sea"] = "Ледяное море"
 
 
 return end
