@@ -86,6 +86,7 @@ if namespace.locale == "ruRU" then
 	L["Winterspring"] = "Зимние Ключи" 
 	L["Zul'Gurub"] = "Зул'Гуруб"
 	-- The Burning Crusade
+	L["Hellfire Peninsula"] = "Полуостров Адского Пламени - Темный портал"
 	L["Terokkar Forest"] = "Лес Тероккар"
 	L["Nagrand"] = "Награнд"
 	L["Netherstorm"] = "Пустоверть"

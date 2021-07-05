@@ -6,7 +6,7 @@ if namespace.locale == "deDE" then
     --ShowHelp Funktion
     L["Nat Pagle would be proud of you."] = "Nat Pagle wäre stolz auf dich!"
     L["- /fishbringer show - Toggles visibility."] = "- /fishbringer show - Fishbringer Bildschirmanzeige an/aus."
-	L["- /fishbringer align - Cycles through text alignment."] = "- /fishbringer align - Textausrichtung ändern."
+	L["- /fishbringer align - Cycles through text alignment."] = "- /fishbringer align - Textausrichtung Ã¤ndern."
 	L["- /fishbringer count - Toggles fish count visibility."] = "- /fishbringer count - Gefangene Fische auf dem Level anzeigen an/aus."
     L["- /fishbringer reset - Resets the fish database."] = "- /fishbringer reset - Fishbringer Datenbank zurücksetzen."
 
@@ -36,13 +36,13 @@ if namespace.locale == "deDE" then
 	L["Teldrassil"]  = "Teldrassil"
 	L["Tirisfal"] =  "Tirisfal"
 	L["Orgrimmar"] = "Orgrimmar" 
-	L["Ironforge"] = "Ironforge"
-	L["Stormwind City"] = "Stormwind" 
-	L["Thunder Bluff"] = "Thunder Bluff" 
+	L["Ironforge"] = "Eisenschmiede"
+	L["Stormwind City"] = "Sturmwind" 
+	L["Thunder Bluff"] = "Donnerfels" 
 	L["Silvermoon City"] = "Silbermond" 
 	L["The Exodar"] = "Die Exodar"
 	L["Darnassus"] = "Darnassus" 
-	L["Undercity"] = "Undercity"
+	L["Undercity"] = "Unterstadt"
 	L["The Barrens"] = "Brachland" 
 	L["Blackfathom Deeps"] = "Blackfathom-Tiefe" 
 	L["Bloodmyst Isle"] = "Blutmythosinsel" 
@@ -53,16 +53,16 @@ if namespace.locale == "deDE" then
 	L["Silverpine Forest"] = "Silberwald"
 	L["The Wailing Caverns"] = "Die Höhlen des Wehklagens" 
 	L["Westfall"] = "Westfall"
-	L["Ashenvale"] = "Ashenvale" 
+	L["Ashenvale"] = "Eschental" 
 	L["Duskwood"] = "Dämmerwald" 
-	L["Hillsbrad Foothills"] = "Vorgebirge von Hillsbrad"
+	L["Hillsbrad Foothills"] = "Vorgebirge des Hügellands"
 	L["Redridge Mountains"] = "Rotkammgebirge"
 	L["Stonetalon Mountains"] = "Steinkrallengebirge" 
 	L["Wetlands"] = "Sumpfland"
 	L["Alterac Mountains"] = "Alteracgebirge" 
 	L["Arathi Highlands"] = "Arathihochland"
 	L["Desolace"] = "Desolace"
-	L["Dustwallow Marsh"] = "Marschen von Dustwallow"
+	L["Dustwallow Marsh"] = "Düstermarschen"
 	L["Scarlet Monastery"] = "Das scharlachrote Kloster"
 	L["Stranglethorn Vale"] = "Schlingendorntal"
 	L["Swamp of Sorrows"] = "Sümpfe des Elends"
@@ -72,7 +72,7 @@ if namespace.locale == "deDE" then
 	L["Feralas"] = "Feralas"
 	L["The Hinterlands"] = "Hinterland"
 	L["Maraudon"] = "Maraudon"
-	L["Moonglade"] = "Moonglade"
+	L["Moonglade"] = "Mondlichtung"
 	L["Tanaris"] = "Tanaris"
 	L["The Temple of Atal'Hakkar"] = "Der Tempel von Atal'Hakkar"
 	L["Un'Goro Crater"] = "Un'Goro-Krater"
@@ -87,6 +87,7 @@ if namespace.locale == "deDE" then
 	L["Winterspring"] = "Winterspring" 
 	L["Zul'Gurub"] = "Zul'Gurub"
 	--- Burning Crusade
+	L["Hellfire Peninsula"] = "Höllenfeuerhalbinsel"
 	L["Terokkar Forest"] = "Wälder von Terokkar"
 	L["Nagrand"] = "Nagrand"
 	L["Netherstorm"] = "Nethersturm"
@@ -96,9 +97,9 @@ if namespace.locale == "deDE" then
 	L["Marshlight Lake"] = "Sumpflichtsee" -- Zangarmarschen
 	L["Sporewind Lake"] = "Sporenwindsee" -- Zangarmarschen
 	L["Serpent Lake"] = "Schlangensee" -- Zangarmarschen
-	L["Blackwind Lake"] = "Schattenwindsee" -- Wälder von Terokarr
-	L["Lake Ere'Noru"] = "See von Ere'Noru" -- Wälder von Terokarr 
-	L["Lake Jorune"] = "Jorunsee" -- Wälder von Terokarr
+	L["Blackwind Lake"] = "Schattenwindsee" -- WÃ¤lder von Terokarr
+	L["Lake Ere'Noru"] = "See von Ere'Noru" -- WÃ¤lder von Terokarr 
+	L["Lake Jorune"] = "Jorunsee" -- WÃ¤lder von Terokarr
 	--- WOTLK
 	L["Borean Tundra"] = "Boreanische Tundra" 
 	L["Dragonblight"] = "Drachenöde"
