@@ -113,6 +113,11 @@ local subzones = {
 	[L["Lake Ere'Noru"]] = 405,
 	[L["Lake Jorune"]] = 405,
 	["Silmyr Lake"] = 405,
+	["Skettis"] = 405,
+	["Blackwind Lake"] = 405,
+	["Terokk's Rest"] = 405,
+	["Veil Ala'rak"] = 405,
+	["Veil Harr'ik"] = 405,
 }
 
 local fishingpoles = { 
@@ -236,13 +241,13 @@ local function UpdateSkill(forceResetFishCounter)
 
 	local fishNeeded = GetNumFishToLevel(skillRank)
 	if skillRank ~= skillMaxRank then 
-		skillRankText = string.format("%d/%d", skillRank, skillMaxRank)
+		skillRankText = string.format("%d(%d)", skillRank, skillMaxRank)
 		fishNeededText = string.format(L["\n%d fish needed to skill up"], fishNeeded)
 	end
 
 	local skillModifierText = ""
 	if skillModifier > 0 then
-		skillModifierText = string.format(" (+%d)", skillModifier)
+		skillModifierText = string.format("+%d = %d", skillModifier, skillRank+skillModifier)
 	end
 		
 	Fishbringer.content:SetFormattedText(
