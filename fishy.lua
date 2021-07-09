@@ -13,7 +13,7 @@ fb:RegisterEvent"PLAYER_ENTERING_WORLD"
 fb:RegisterEvent"ADDON_LOADED"
 fb:RegisterEvent"COMBAT_LOG_EVENT"
 fb:RegisterEvent"SKILL_LINES_CHANGED"
-fb:RegisterEvent"LOOT_OPENED"
+fb:RegisterEvent"LOOT_READY"
 fb:RegisterEvent"ZONE_CHANGED_NEW_AREA"
 fb:RegisterEvent"ZONE_CHANGED"
 fb:RegisterEvent"UNIT_INVENTORY_CHANGED"
@@ -27,24 +27,18 @@ local zones = {
 	[L["Durotar"]] = -70, 
 	[L["Elwynn Forest"]] = -70, 
 	[L["Mulgore"]] = -70,
-	[L["Eversong Forest"]] = -70, 
-	[L["Azuremyst Isle"]] = -70, 
 	[L["Teldrassil"]]  = -70, 
 	[L["Tirisfal Glades"]] = -70, 
 	[L["Orgrimmar"]] = -20, 
 	[L["Ironforge"]] = -20, 
 	[L["Stormwind City"]] = -20, 
 	[L["Thunder Bluff"]] = -20, 
-	[L["Silvermoon City"]] = -20, 
-	[L["The Exodar"]] = -20, 
 	[L["Darnassus"]] = -20, 
 	[L["Undercity"]] = -20, 
 	[L["The Barrens"]] = -20, 
 	[L["Blackfathom Deeps"]] = -20, 
-	[L["Bloodmyst Isle"]] = -20, 
 	[L["Darkshore"]] = -20, 
 	[L["The Deadmines"]] = -20, 
-	[L["Ghostlands"]] = -20, 
 	[L["Loch Modan"]] = -20, 
 	[L["Silverpine Forest"]] = -20, 
 	[L["The Wailing Caverns"]] = -20, 
@@ -72,9 +66,7 @@ local zones = {
 	[L["Tanaris"]] = 205, 
 	[L["The Temple of Atal'Hakkar"]] = 205, 
 	[L["Un'Goro Crater"]] = 205, 
-	[L["Western Plaguelands"]] = 205, 
-	[L["Shadowmoon Valley"]] = 280,
-	[L["Zangarmarsh"]] = 305, -- Burning Crusade 
+	[L["Western Plaguelands"]] = 205,
 	[L["Burning Steppes"]] = 330, 
 	[L["Deadwind Pass"]] = 330, 
 	[L["Eastern Plaguelands"]] = 330, 
@@ -83,6 +75,16 @@ local zones = {
 	[L["Stratholme"]] = 330, 
 	[L["Winterspring"]] = 330, 
 	[L["Zul'Gurub"]] = 330, 
+	-- Burning Crusade 
+	[L["Azuremyst Isle"]] = -70, 
+	[L["Bloodmyst Isle"]] = -20, 
+	[L["Silvermoon City"]] = -20, 
+	[L["The Exodar"]] = -20, 
+	[L["Ghostlands"]] = -20, 
+	[L["Eversong Woods"]] = -70, 
+	[L["Hellfire Peninsula"]] = 280,
+	[L["Shadowmoon Valley"]] = 280,
+	[L["Zangarmarsh"]] = 305,
 	[L["Terokkar Forest"]] = 355,
 	[L["Nagrand"]] = 380, 
 	[L["Netherstorm"]] = 380,
@@ -96,19 +98,26 @@ local zones = {
 	[L["The Frozen Sea"]] = 480,
 }
 local subzones = {
-	["Jaguero Isle"] = 205, 
-	["Bay of Storms"] = 330, 
-	["Hetaera's Clutch"] = 330, 
-	["Scalebeard's Cave"] = 330, 
-	["Jademir Lake"] = 330, 
-	[L["Marshlight Lake"]] = 355, 
+	["Jaguero Isle"] = 205,
+	["Bay of Storms"] = 330,
+	["Hetaera's Clutch"] = 330,
+	["Scalebeard's Cave"] = 330,
+	["Jademir Lake"] = 330,
+	["Silmyr Lake"] = 405,
+	[L["Marshlight Lake"]] = 355,
 	[L["Sporewind Lake"]] = 355,
-	[L["Serpent Lake"]] = 355, 
+	[L["Serpent Lake"]] = 355,
 	[L["Lake Sunspring"]] = 395,
-	[L["Skysong Lake"]] = 395, 
+	[L["Skysong Lake"]] = 395,
 	[L["Blackwind Lake"]] = 405,
-	[L["Lake Ere'Noru"]] = 405, 
+	[L["Lake Ere'Noru"]] = 405,
 	[L["Lake Jorune"]] = 405,
+	["Silmyr Lake"] = 405,
+	["Skettis"] = 405,
+	["Blackwind Lake"] = 405,
+	["Terokk's Rest"] = 405,
+	["Veil Ala'rak"] = 405,
+	["Veil Harr'ik"] = 405,
 }
 
 local fishingpoles = { 
@@ -175,9 +184,7 @@ local function UpdateCatchInfo()
 	end
 
 	local chance = (
-		(
-			db[char].fishingSkill + db[char].fishingBuff
-		) - zoneSkill
+			db[char].fishingSkill + db[char].fishingBuff - zoneSkill
 	) * 0.01 + 0.05
 	
 	if zoneSkill < 0 then 
@@ -234,13 +241,13 @@ local function UpdateSkill(forceResetFishCounter)
 
 	local fishNeeded = GetNumFishToLevel(skillRank)
 	if skillRank ~= skillMaxRank then 
-		skillRankText = string.format("%d/%d", skillRank, skillMaxRank)
+		skillRankText = string.format("%d(%d)", skillRank, skillMaxRank)
 		fishNeededText = string.format(L["\n%d fish needed to skill up"], fishNeeded)
 	end
 
 	local skillModifierText = ""
 	if skillModifier > 0 then
-		skillModifierText = string.format(" (+%d)", skillModifier)
+		skillModifierText = string.format("+%d = %d", skillModifier, skillRank+skillModifier)
 	end
 		
 	Fishbringer.content:SetFormattedText(
@@ -455,9 +462,9 @@ fb.ADDON_LOADED = function(self, event, addon)
 	InitializeFrame()
 end
 
-fb.COMBAT_LOG_EVENT = UpdateSkill
-fb.SKILL_LINES_CHANGED = UpdateSkill
-fb.LOOT_OPENED = IncrementFishCount
+fb.COMBAT_LOG_EVENT = UpdateFishingSkill
+fb.SKILL_LINES_CHANGED = UpdateFishingSkill
+fb.LOOT_READY = IncrementFishCount
 fb.ZONE_CHANGED_NEW_AREA = UpdateCatchInfo
 fb.ZONE_CHANGED = UpdateCatchInfo
 fb.UNIT_INVENTORY_CHANGED = CheckForFishingPole
