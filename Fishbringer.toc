@@ -9,8 +9,14 @@
 ## SavedVariables: FishbringerDB
 ## Version: 2.5.1-2
 
+# localizations:
 localization.core.lua
 Localization.deDE.lua
 Localization.ruRU.lua
+Localization.esES.lua
+Localization.frFR.lua
+Localization.ptBR.lua
+
+# main:
 fishy.lua
 

@@ -7,6 +7,7 @@ local ADDON_NAME, namespace = ... 	--localization
 local L = namespace.L 				--localization
 local version = GetAddOnMetadata(ADDON_NAME, "Version")
 local addoninfo = 'v'..version
+local areaTable = {}
 
 
 fb:RegisterEvent"PLAYER_ENTERING_WORLD"
@@ -23,103 +24,100 @@ local function Print(text)
 end
 
 local zones = {
-	[L["Dun Morogh"]] = -70, 
-	[L["Durotar"]] = -70, 
-	[L["Elwynn Forest"]] = -70, 
-	[L["Mulgore"]] = -70,
-	[L["Teldrassil"]]  = -70, 
-	[L["Tirisfal Glades"]] = -70, 
-	[L["Orgrimmar"]] = -20, 
-	[L["Ironforge"]] = -20, 
-	[L["Stormwind City"]] = -20, 
-	[L["Thunder Bluff"]] = -20, 
-	[L["Darnassus"]] = -20, 
-	[L["Undercity"]] = -20, 
-	[L["The Barrens"]] = -20, 
-	[L["Blackfathom Deeps"]] = -20, 
-	[L["Darkshore"]] = -20, 
-	[L["The Deadmines"]] = -20, 
-	[L["Loch Modan"]] = -20, 
-	[L["Silverpine Forest"]] = -20, 
-	[L["The Wailing Caverns"]] = -20, 
-	[L["Westfall"]] = -20, 
-	[L["Ashenvale"]] = 55, 
-	[L["Duskwood"]] = 55, 
-	[L["Hillsbrad Foothills"]] = 55, 
-	[L["Redridge Mountains"]] = 55, 
-	[L["Stonetalon Mountains"]] = 55, 
-	[L["Wetlands"]] = 55, 
-	[L["Alterac Mountains"]] = 130, 
-	[L["Arathi Highlands"]] = 130, 
-	[L["Desolace"]] = 130, 
-	[L["Dustwallow Marsh"]] = 130, 
-	[L["Scarlet Monastery"]] = 130, 
-	[L["Stranglethorn Vale"]] = 130, 
-	[L["Swamp of Sorrows"]] = 130, 
-	[L["Thousand Needles"]] = 130, 
-	[L["Azshara"]] = 205, 
-	[L["Felwood"]] = 205,
-	[L["Feralas"]] = 205, 
-	[L["The Hinterlands"]] = 205, 
-	[L["Maraudon"]] = 205, 
-	[L["Moonglade"]] = 205,
-	[L["Tanaris"]] = 205, 
-	[L["The Temple of Atal'Hakkar"]] = 205, 
-	[L["Un'Goro Crater"]] = 205, 
-	[L["Western Plaguelands"]] = 205,
-	[L["Burning Steppes"]] = 330, 
-	[L["Deadwind Pass"]] = 330, 
-	[L["Eastern Plaguelands"]] = 330, 
-	[L["Scholomance"]] = 330, 
-	[L["Silithus"]] = 330, 
-	[L["Stratholme"]] = 330, 
-	[L["Winterspring"]] = 330, 
-	[L["Zul'Gurub"]] = 330, 
-	-- Burning Crusade 
-	[L["Azuremyst Isle"]] = -70, 
-	[L["Bloodmyst Isle"]] = -20, 
-	[L["Silvermoon City"]] = -20, 
-	[L["The Exodar"]] = -20, 
-	[L["Ghostlands"]] = -20, 
-	[L["Eversong Woods"]] = -70, 
-	[L["Hellfire Peninsula"]] = 280,
-	[L["Shadowmoon Valley"]] = 280,
-	[L["Zangarmarsh"]] = 305,
-	[L["Terokkar Forest"]] = 355,
-	[L["Nagrand"]] = 380, 
-	[L["Netherstorm"]] = 380,
-	-- Wrath of the Lich King
-	[L["Borean Tundra"]] = 380, 
-	[L["Dragonblight"]] = 380, 
-	[L["Howling Fjord"]] = 380, 
-	[L["Crystalsong Forest"]] = 405,
-	[L["Dalaran"]] = 430, 
-	[L["Sholazar Basin"]] = 430, 
-	[L["The Frozen Sea"]] = 480,
+	[1411] = -70,
+	[1412] = -70,
+	[1413] = -20,
+	[1416] = 130,
+	[1417] = 130,
+	[1420] = -70,
+	[1421] = -20,
+	[1422] = 205,
+	[1423] = 330,
+	[1424] = 55,
+	[1425] = 205,
+	[1426] = -70,
+	[1428] = 330,
+	[1429] = -70,
+	[1430] = 330,
+	[1431] = 55,
+	[1432] = -20,
+	[1433] = 55,
+	[1434] = 130,
+	[1435] = 130,
+	[1436] = -20,
+	[1437] = 55,
+	[1438] = -70,
+	[1439] = -20,
+	[1440] = 55,
+	[1441] = 130,
+	[1442] = 55,
+	[1443] = 130,
+	[1444] = 205,
+	[1445] = 130,
+	[1446] = 205,
+	[1447] = 205,
+	[1448] = 205,
+	[1449] = 205,
+	[1450] = 205,
+	[1451] = 330,
+	[1452] = 330,
+	[1453] = -20,
+	[1454] = -20,
+	[1455] = -20,
+	[1456] = -20,
+	[1457] = -20,
+	[1458] = -20,
+	[1941] = -70,
+	[1942] = -20,
+	[1943] = -70,
+	[1944] = 280,
+	[1946] = 305,
+	[1947] = -20,
+	[1948] = 280,
+	[1950] = -20,
+	[1951] = 380,
+	[1952] = 355,
+	[1953] = 380,
+	[1954] = -20,
 }
 local subzones = {
-	["Jaguero Isle"] = 205,
-	["Bay of Storms"] = 330,
-	["Hetaera's Clutch"] = 330,
-	["Scalebeard's Cave"] = 330,
-	["Jademir Lake"] = 330,
-	["Silmyr Lake"] = 405,
-	[L["Marshlight Lake"]] = 355,
-	[L["Sporewind Lake"]] = 355,
-	[L["Serpent Lake"]] = 355,
-	[L["Lake Sunspring"]] = 395,
-	[L["Skysong Lake"]] = 395,
-	[L["Blackwind Lake"]] = 405,
-	[L["Lake Ere'Noru"]] = 405,
-	[L["Lake Jorune"]] = 405,
-	["Silmyr Lake"] = 405,
-	["Skettis"] = 405,
-	["Blackwind Lake"] = 405,
-	["Terokk's Rest"] = 405,
-	["Veil Ala'rak"] = 405,
-	["Veil Harr'ik"] = 405,
+	[297] = 205,
+	[718] = -20, --Wailing Caverns Entrance
+	[719] = -20, --BFD Entrance
+	[1112] = 330,
+	[1222] = 330,
+	[1227] = 330,
+	[1477] = 205, -- ST Entrance
+	[1977] = 330, -- ZG Entrance
+	[2100] = 205, --Maraudon Entrance
+	[3140] = 330,
+	[3614] = 395,
+	[3621] = 395,
+	[3653] = 355,
+	[3656] = 355,
+	[3658] = 355,
+	[3679] = 405,
+	[3690] = 405,
+	[3691] = 405,
+	[3692] = 405,
+	[3859] = 405,
+	[3974] = 405,
+	[3975] = 405,
+	[3976] = 405,
 }
-
+local instances = {
+	[36] = -20,
+	[43] = -20,
+	[48] = -20,
+	[109] = 205,
+	[309] = 309,
+	[329] = 330,
+	[349] = 205,
+	[548] = 405,
+	[1001] = 130,
+	[1004] = 130,
+	[1007] = 330,
+}
 local fishingpoles = { 
 	[6256] = true,
 	[6365] = true,
@@ -161,13 +159,52 @@ local function ResetFishCounter(numFish)
  	UpdateFishCount(false)
 end
 
-local function UpdateCatchInfo()
-	local zoneText = GetSubZoneText()
-	local zoneSkill = subzones[zoneText]
+local function populateAreaTable()
+	local areaName
+	for areaId=1,10500 do
+	   areaName=C_Map.GetAreaInfo(areaId)
+	   if areaName then
+		  areaTable[areaName]=areaId
+	   end
+	end
+end
 
-	if not zoneSkill then 
+--[[ GetExploredAreaIDsAtPosition doesn't always work for many locations - UNRELIABLE
+local function getPlayerAreaId()
+	local areaId
+	local unit = "Player"
+	local mapId = C_Map.GetBestMapForUnit(unit)
+	local mapPos = C_Map.GetPlayerMapPosition(mapId, unit)
+	areaIds = C_MapExplorationInfo.GetExploredAreaIDsAtPosition(mapId,mapPos)
+	if areaIds and areaIds[1] then
+		areaId = areaIds[1]
+	end
+	return areaId
+end
+--]]
+
+local function UpdateCatchInfo()
+	local zoneText
+	local zoneSkill
+	
+	if IsInInstance() then
+		local _,_,_,_,_,_,_,instanceId = GetInstanceInfo()
+		zoneSkill = instances[instanceId]
 		zoneText = GetRealZoneText()
-		zoneSkill = zones[zoneText]
+	else
+		zoneText = GetSubZoneText()
+		if zoneText == "" then
+			zoneText = GetRealZoneText()
+		end
+		local areaId = areaTable[zoneText]
+		if areaId then
+			zoneSkill = subzones[areaId]
+		end
+		if not zoneSkill then
+			zoneText = GetRealZoneText()
+			local mapId = C_Map.GetBestMapForUnit("Player")
+			zoneSkill = zones[mapId]
+		end
 	end
 
 	-- Sometimes we can trigger this before the player is in any zone
@@ -207,11 +244,19 @@ local function UpdateCatchInfo()
 	else
 		color = "ff40bf40"
 	end
-	Fishbringer.zoneInfo:SetFormattedText(
-		L["\124c%s%s\124r\n%d skill needed to fish\n(%d needed for 100%% catch rate)"],
-		color, zoneText, zoneSkill, maxZoneSkill, chance * 100
-	)
-	Fishbringer.catchRate:SetFormattedText(L["%d%% catch rate"], chance * 100)
+	if zoneSkill == 0 then
+		Fishbringer.zoneInfo:SetFormattedText(
+			L["\124c%s%s\124r\nNo fish in this zone"],
+			color, zoneText, zoneSkill, maxZoneSkill, chance * 100
+		)
+		Fishbringer.catchRate:SetText("")
+	else
+		Fishbringer.zoneInfo:SetFormattedText(
+			L["\124c%s%s\124r\n%d skill needed to fish\n(%d needed for 100%% catch rate)"],
+			color, zoneText, zoneSkill, maxZoneSkill, chance * 100
+		)
+		Fishbringer.catchRate:SetFormattedText(L["%d%% catch rate"], chance * 100)
+	end
 end
 
 local function GetFishingSkill()
@@ -330,7 +375,7 @@ local function InitializeDB(resetDatabase)
 		db = {}
 		FishbringerDB = db
 	end
-
+	populateAreaTable()
 	if resetDatabase or not db[char] then 
 		db[char] = {
 			fishingSkill = 0, 
