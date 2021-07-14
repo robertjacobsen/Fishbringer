@@ -7,6 +7,9 @@ local ADDON_NAME, namespace = ... 	--localization
 local L = namespace.L 				--localization
 local version = GetAddOnMetadata(ADDON_NAME, "Version")
 local addoninfo = 'v'..version
+local _,_,_,interface = GetBuildInfo()
+local classicEra = (interface==11307)
+local classicTBC = (interface==20501)
 local areaTable = {}
 
 
@@ -390,12 +393,25 @@ local function InitializeDB(resetDatabase)
 	end
 end
 
+local function classicEraCreateFrame()
+	return CreateFrame("Frame", "Fishbringer", UIParent)
+end
+local function classicTBCCreateFrame()
+	return CreateFrame("Frame", "Fishbringer", UIParent, "BackdropTemplate")
+end
+
 local function InitializeFrame()
 	-- Frame madness
 	if Fishbringer then
 		return
 	end
-	local Fishbringer = CreateFrame("Frame", "Fishbringer", UIParent, "BackdropTemplate")
+	if classicEra then
+		local Fishbringer = classicEraCreateFrame()
+	elseif classicTBC then
+		local Fishbringer = classicTBCCreateFrame()
+	else
+		return
+	end
 	Fishbringer:EnableMouse(true)
 	Fishbringer:SetMovable(true)
 	Fishbringer:SetUserPlaced(true)
@@ -520,67 +536,6 @@ local function ShowHelp()
 	Print(L["- /fishbringer align - Cycles through text alignment."])
 	Print(L["- /fishbringer count - Toggles fish count visibility."])
 	Print(L["- /fishbringer reset - Resets the fish database."])
-end
-
-local function FishbringerMenu()
-
-	--[[
-	if FishrbingerUI then
-		return
-	end
-	
-	local FishbringerUI = CreateFrame("Frame", "FishbringerUI", UIParent, "BasicFrameTemplateWithInset")
-	FishbringerUI:SetSize(300, 400);
-	FishbringerUI:SetPoint("Center", UIParent, "Center");
-	FishbringerUI:EnableMouse(true);
-	FishbringerUI:SetMovable(false);
-	FishbringerUI:RegisterForDrag("LeftButton")
-	FishbringerUI:SetScript("OnDragStart", FishbringerUI.StartMoving)
-	FishbringerUI:SetScript("OnDragStop", FishbringerUI.StopMovingOrSizing)
-	FishbringerUI:SetBackdrop({
-		bgFile = "Interface\\ChatFrame\\ChatFrameBackground", 
-		tile = true, 
-		tileSize = 16, 
-		insets = {
-			left = 4, 
-			right = 4, 
-			top = 4,
-			bottom = 4
-		},
-	})
-	FishbringerUI:SetBackdropColor(0, 0, 0, .6) 
-	FishbringerUI:Show();
-
-	FishbringerUI.title = FishbringerUI:CreateFontString(nil, "Overlay");
-	FishbringerUI.title:SetFontObject("GameFontHighlight");
-	FishbringerUI.title:SetPoint("Center", FishbringerUI.TitleBg, "Center", 5, 0);
-	FishbringerUI.title:SetText("|cFF00FF00Fishbringer v1.13.4");
-
-	tinsert(UISpecialFrames, FishbringerUI:GetName())
-
-	local MoveButton = CreateFrame("CheckButton", "MoveButton_GlobalName", FishbringerUI, "ChatConfigCheckButtonTemplate");
-	MoveButton:SetPoint("TOPLEFT", 10, -60);
-	MoveButton_GlobalNameText:SetText("Window Moveable");
-	MoveButton.tooltip = "Let's move the Window...or not?";
-	MoveButton:SetScript("OnClick", 
-	  function()
-		if FishbringerUI:IsMovable == false then
-			FishbringerUI:SetMovable(true)
-		else
-			FishbringerUI:SetMovable(false)
-		end
-	  end
-	);
-
-	local ToggleButton = CreateFrame("CheckButton", "ToggleButton_GlobalName", FishbringerUI, "ChatConfigCheckButtonTemplate");
-	ToggleButton:SetPoint("TOPLEFT", 10, -30);
-	ToggleButton_GlobalNameText:SetText("Show/Hide the Fishing Widget");
-	ToggleButton.tooltip = "Toggles the Widget visibility.";
-	ToggleButton:SetScript("OnClick", 
-	  function()
-		Toggle();
-	  end
-	); --]]
 end
 
 SlashCmdList["FISHBRINGER"] = function(arg)
