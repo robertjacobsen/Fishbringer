@@ -1,0 +1,10 @@
+## Interface: 20503
+## Title: Fishbringer
+## Notes: The legendary Fishbringer, Guide of the Scarlet Highlord! Nat Pagle would be proud of you!
+## Author: Kalerath, Fye (Localization Code & Bugfixes), Zilom (Bugfixes & Localization Redesigned + Added), leafoe (Russian Localization)
+## Version: 2.5.4
+
+# main:
+localization.core.lua
+
+# This file is here for compatibility with CurseForge only. it has no function whatsoever
