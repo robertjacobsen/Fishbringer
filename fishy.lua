@@ -160,7 +160,7 @@ local function GetNumFishToLevel(skillRank)
 			numFishToLevel = 1
 		end
 	else
-		numFishToLevel=math.ceil(skillRank/expScale)+5
+		numFishToLevel=math.ceil((skillRank-315)/expScale)+10
 	end
 
 	return numFishToLevel
@@ -238,8 +238,10 @@ local function UpdateCatchInfo()
 		end
 		if not zoneSkill then
 			local mapId = C_Map.GetBestMapForUnit("Player")
-			zoneText = C_Map.GetMapInfo(mapId).name
-			zoneSkill = zones[mapId]
+			if mapId then
+				zoneText = C_Map.GetMapInfo(mapId).name
+				zoneSkill = zones[mapId]
+			end
 		end
 	end
 	-- Sometimes we can trigger this before the player is in any zone
@@ -324,7 +326,11 @@ local function UpdateSkill(forceResetFishCounter)
 	if skillRank ~= skillMaxRank then
 		skillRankText = string.format("%d(%d)", skillRank, skillMaxRank)
 		if fishNeeded>1 then
-			strFishNeeded = string.format("%d-%d",fishNeeded-1, fishNeeded)
+			if fishNeeded<10 then
+				strFishNeeded = string.format("%d-%d",fishNeeded-1, fishNeeded)
+			else
+				strFishNeeded = string.format("%d-%d",fishNeeded-1, fishNeeded+1)
+			end
 		else
 			strFishNeeded = string.format("%d", fishNeeded)
 		end
@@ -426,9 +432,30 @@ local function InitializeDB(resetDatabase)
 			maxFishingSkill = 0,
 			isShown = false,
 			isFishCountShown = true,
-			alignment = "RIGHT"
+			alignment = "RIGHT",
+			isGradiant = true,
 		}
 	end
+end
+
+local function setTitleText()
+
+	local name
+	if db[char].isGradiant == nil then
+		db[char].isGradiant = true
+	end
+	if db[char].isGradiant then
+		name = "|cff0000ffF|cff0049ffi|cff0069ffs|cff0083ffh|cff0099ffb|cff00acffr|cff00bfffi|cff00d0ffn|cff00e1ffg|cff00f0ffe|cff00ffffr"
+	else
+		name = "Fishbringer"
+	end
+	Fishbringer.title:SetText(name)
+
+end
+
+local function toggleColor()
+	db[char].isGradiant=not db[char].isGradiant
+	setTitleText()
 end
 
 local function InitializeFrame()
@@ -479,14 +506,9 @@ local function InitializeFrame()
 	title:SetJustifyH(db[char].alignment)
 	title:SetFont(FONT, 16)
 	title:SetShadowOffset(1, -1)
-	local name
-	if random(100) < 5 then 
-		name = "Corrupted Fishbringer"
-	else
-		name = "Fishbringer"
-	end
-	title:SetText(name)
+
 	Fishbringer.title = title
+	setTitleText()
 
 	local zoneInfo = Fishbringer:CreateFontString(nil, "OVERLAY")
 	zoneInfo:SetHeight(50)
@@ -564,6 +586,7 @@ local function ShowHelp()
 	Print(L["- /fishbringer align - Cycles through text alignment."])
 	Print(L["- /fishbringer count - Toggles fish count visibility."])
 	Print(L["- /fishbringer reset - Resets the fish database."])
+	Print(L["- /fishbringer color - Enables/disables gradient color."])
 end
 
 SlashCmdList["FISHBRINGER"] = function(arg)
@@ -577,6 +600,9 @@ SlashCmdList["FISHBRINGER"] = function(arg)
 		InitializeDB(true)
 		UpdateSkill(true)
 		UpdateCatchInfo()
+		return
+	elseif arg == "color" then
+		toggleColor()
 		return
 	end
 	return ShowHelp()

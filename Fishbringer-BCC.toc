@@ -10,7 +10,7 @@
 ## Notes-ptBR: O lendário Fishbringer, Guia do Highlord Escarlate! Nat Pagle ficaria orgulhoso de você!
 ## Author: Kalerath, Fye (Localization Code & Bugfixes), Zilom (Bugfixes & Localization Redesigned + Added), leafoe (Russian Localization)
 ## SavedVariables: FishbringerDB
-## Version: 3.0.2
+## Version: 3.0.3
 
 # main:
 localization.core.lua
