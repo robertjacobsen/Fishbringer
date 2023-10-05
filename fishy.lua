@@ -1,14 +1,24 @@
-FishbringerDB = {}
 local FONT = select(1, GameFontNormalSmall:GetFont())
 local fb = CreateFrame"Frame"
 local db
 local char = string.format("%s - %s", UnitName"player", GetRealmName())
+local ADDON_NAME, namespace = ... 	--localization
+local L = namespace.L 				--localization
+local version = GetAddOnMetadata(ADDON_NAME, "Version")
+local addoninfo = 'v'..version
+local _,_,_,interface = GetBuildInfo()
+local classicEra = (interface>10000 and interface<12000)
+local classicTBC = (interface>20000 and interface<30000)
+local classicWrath = (interface>30000 and interface<40000)
+local areaTable = {}
+
 
 fb:RegisterEvent"PLAYER_ENTERING_WORLD"
 fb:RegisterEvent"ADDON_LOADED"
 fb:RegisterEvent"COMBAT_LOG_EVENT"
 fb:RegisterEvent"SKILL_LINES_CHANGED"
-fb:RegisterEvent"LOOT_OPENED"
+fb:RegisterEvent"LOOT_READY"
+fb:RegisterEvent"LOOT_CLOSED"
 fb:RegisterEvent"ZONE_CHANGED_NEW_AREA"
 fb:RegisterEvent"ZONE_CHANGED"
 fb:RegisterEvent"UNIT_INVENTORY_CHANGED"
@@ -18,93 +28,112 @@ local function Print(text)
 end
 
 local zones = {
-	["Dun Morogh"] = -70, 
-	["Durotar"] = -70, 
-	["Elwynn Forest"] = -70, 
-	["Mulgore"] = -70,
-	["Eversong Forest"] = -70, 
-	["Azuremyst Isle"] = -70, 
-	["Teldrassil"]  = -70, 
-	["Tirisfal Glades"] = -70, 
-	["Orgrimmar"] = -20, 
-	["Ironforge"] = -20, 
-	["Stormwind City"] = -20, 
-	["Thunder Bluff"] = -20, 
-	["Silvermoon City"] = -20, 
-	["The Exodar"] = -20, 
-	["Darnassus"] = -20, 
-	["Undercity"] = -20, 
-	["The Barrens"] = -20, 
-	["Blackfathom Deeps"] = -20, 
-	["Bloodmyst Isle"] = -20, 
-	["Darkshore"] = -20, 
-	["The Deadmines"] = -20, 
-	["Ghostlands"] = -20, 
-	["Loch Modan"] = -20, 
-	["Silverpine Forest"] = -20, 
-	["The Wailing Caverns"] = -20, 
-	["Westfall"] = -20, 
-	["Ashenvale"] = 55, 
-	["Duskwood"] = 55, 
-	["Hillsbrad Foothills"] = 55, 
-	["Redridge Mountains"] = 55, 
-	["Stonetalon Mountains"] = 55, 
-	["Wetlands"] = 55, 
-	["Alterac Mountains"] = 130, 
-	["Arathi Highlands"] = 130, 
-	["Desolace"] = 130, 
-	["Dustwallow Marsh"] = 130, 
-	["Scarlet Monastery"] = 130, 
-	["Stranglethorn Vale"] = 130, 
-	["Swamp of Sorrows"] = 130, 
-	["Thousand Needles"] = 130, 
-	["Azshara"] = 205, 
-	["Felwood"] = 205,
-	["Feralas"] = 205, 
-	["The Hinterlands"] = 205, 
-	["Maraudon"] = 205, 
-	["Moonglade"] = 205,
-	["Tanaris"] = 205, 
-	["The Temple of Atal'Hakkar"] = 205, 
-	["Un'Goro Crater"] = 205, 
-	["Western Plaguelands"] = 205, 
-	["Shadowmoon Valley"] = 280,
-	["Zangarmarsh"] = 305, 
-	["Burning Steppes"] = 330, 
-	["Deadwind Pass"] = 330, 
-	["Eastern Plaguelands"] = 330, 
-	["Scholomance"] = 330, 
-	["Silithus"] = 330, 
-	["Stratholme"] = 330, 
-	["Winterspring"] = 330, 
-	["Zul'Gurub"] = 330, 
-	["Terokkar Forest"] = 355,
-	["Nagrand"] = 380, 
-	["Netherstorm"] = 380,
-	["Borean Tundra"] = 380, 
-	["Dragonblight"] = 380, 
-	["Howling Fjord"] = 380, 
-	["Crystalsong Forest"] = 405,
-	["Dalaran"] = 430, 
-	["Sholazar Basin"] = 430, 
-	["The Frozen Sea"] = 480,
+	[114] = 380,
+	[115] = 380,
+	[116] = 380,
+	[117] = 380,
+	[118] = 480,
+	[119] = 430,
+	[123] = 430,
+	[125] = 430,
+	[126] = 430,
+	[127] = 405,
+	[170] = 480,
+	[1411] = -70,
+	[1412] = -70,
+	[1413] = -20,
+	[1416] = 130,
+	[1417] = 130,
+	[1420] = -70,
+	[1421] = -20,
+	[1422] = 205,
+	[1423] = 330,
+	[1424] = 55,
+	[1425] = 205,
+	[1426] = -70,
+	[1428] = 330,
+	[1429] = -70,
+	[1430] = 330,
+	[1431] = 55,
+	[1432] = -20,
+	[1433] = 55,
+	[1434] = 130,
+	[1435] = 130,
+	[1436] = -20,
+	[1437] = 55,
+	[1438] = -70,
+	[1439] = -20,
+	[1440] = 55,
+	[1441] = 130,
+	[1442] = 55,
+	[1443] = 130,
+	[1444] = 205,
+	[1445] = 130,
+	[1446] = 205,
+	[1447] = 205,
+	[1448] = 205,
+	[1449] = 205,
+	[1450] = 205,
+	[1451] = 330,
+	[1452] = 330,
+	[1453] = -20,
+	[1454] = -20,
+	[1455] = -20,
+	[1456] = -20,
+	[1457] = -20,
+	[1458] = -20,
+	[1941] = -70,
+	[1942] = -20,
+	[1943] = -70,
+	[1944] = 280,
+	[1946] = 305,
+	[1947] = -20,
+	[1948] = 280,
+	[1950] = -20,
+	[1951] = 380,
+	[1952] = 355,
+	[1953] = 380,
+	[1954] = -20,
 }
 local subzones = {
-	["Jaguero Isle"] = 205, 
-	["Bay of Storms"] = 330, 
-	["Hetaera's Clutch"] = 330, 
-	["Scalebeard's Cave"] = 330, 
-	["Jademir Lake"] = 330, 
-	["Marshlight Lake"] = 355, 
-	["Sporewind Lake"] = 355,
-	["Serpent Lake"] = 355, 
-	["Lake Sunspring"] = 395,
-	["Skysong Lake"] = 395, 
-	["Blackwind Lake"] = 405,
-	["Lake Ere'Noru"] = 405, 
-	["Lake Jorune"] = 405,
+	[297] = 205,
+	[718] = -20, --Wailing Caverns Entrance
+	[719] = -20, --BFD Entrance
+	[1112] = 330,
+	[1222] = 330,
+	[1227] = 330,
+	[1477] = 205, -- ST Entrance
+	[1977] = 330, -- ZG Entrance
+	[2100] = 205, --Maraudon Entrance
+	[3140] = 330,
+	[3614] = 395,
+	[3621] = 395,
+	[3653] = 355,
+	[3656] = 355,
+	[3658] = 355,
+	[3679] = 405,
+	[3690] = 405,
+	[3691] = 405,
+	[3692] = 405,
+	[3979] = 480,
+	[3859] = 405,
+	[3974] = 405,
+	[3975] = 405,
+	[3976] = 405,
 }
-
+local instances = {
+	[36] = -20,
+	[43] = -20,
+	[48] = -20,
+	[109] = 205,
+	[309] = 309,
+	[329] = 330,
+	[349] = 205,
+	[548] = 130,
+	[1001] = 130,
+	[1004] = 130,
+	[1007] = 330,
+}
 local fishingpoles = { 
 	[6256] = true,
 	[6365] = true,
@@ -115,14 +144,26 @@ local fishingpoles = {
 	[19970] = true,
 	[25978] = true,
 	[44050] = true,
+	[45120] = true,
+	[45858] = true,
+	[45991] = true,
+	[45992] = true,
 }
 
 local function GetNumFishToLevel(skillRank)
-	if skillRank <= 75 then
-		return 1
+	local classicScale=25
+	local expScale=75
+	local numFishToLevel
+	if skillRank <= 300 then
+		numFishToLevel=math.ceil(skillRank / classicScale)-2
+		if numFishToLevel < 1 then
+			numFishToLevel = 1
+		end
 	else
-		return math.ceil((skillRank - 75) / 25)
+		numFishToLevel=math.ceil((skillRank-315)/expScale)+10
 	end
+
+	return numFishToLevel
 end	
 
 local function UpdateFishCount(shouldIncrement)
@@ -131,13 +172,21 @@ local function UpdateFishCount(shouldIncrement)
 	end
 
 	Fishbringer.fishCount:SetFormattedText(
-		"%d fish caught at this level",
+		L["%d fish caught at this level"],
 		db[char].fishCaught
 	)
 end
 
+local finishedLooting = true
+local function LootClosed()
+	finishedLooting = true
+end
+
 local function IncrementFishCount()
-	UpdateFishCount(true)
+	if finishedLooting then
+		finishedLooting = false
+		UpdateFishCount(true)
+	end
 end
 
 local function ResetFishCounter(numFish)
@@ -146,15 +195,55 @@ local function ResetFishCounter(numFish)
  	UpdateFishCount(false)
 end
 
-local function UpdateCatchInfo()
-	local zoneText = GetSubZoneText()
-	local zoneSkill = subzones[zoneText]
-
-	if not zoneSkill then 
-		zoneText = GetRealZoneText()
-		zoneSkill = zones[zoneText]
+local function populateAreaTable()
+	local areaName
+	for areaId=1,10500 do
+	   areaName=C_Map.GetAreaInfo(areaId)
+	   if areaName then
+		  areaTable[areaName]=areaId
+	   end
 	end
+end
 
+--[[ GetExploredAreaIDsAtPosition doesn't always work for many locations - UNRELIABLE
+local function getPlayerAreaId()
+	local areaId
+	local unit = "Player"
+	local mapId = C_Map.GetBestMapForUnit(unit)
+	local mapPos = C_Map.GetPlayerMapPosition(mapId, unit)
+	areaIds = C_MapExplorationInfo.GetExploredAreaIDsAtPosition(mapId,mapPos)
+	if areaIds and areaIds[1] then
+		areaId = areaIds[1]
+	end
+	return areaId
+end
+--]]
+
+local function UpdateCatchInfo()
+	local zoneText
+	local zoneSkill
+	
+	if IsInInstance() then
+		local _,_,_,_,_,_,_,instanceId = GetInstanceInfo()
+		zoneSkill = instances[instanceId]
+		zoneText = GetRealZoneText()
+	else
+		zoneText = GetSubZoneText()
+		if zoneText == "" then
+			zoneText = GetRealZoneText()
+		end
+		local areaId = areaTable[zoneText]
+		if areaId then
+			zoneSkill = subzones[areaId]
+		end
+		if not zoneSkill then
+			local mapId = C_Map.GetBestMapForUnit("Player")
+			if mapId then
+				zoneText = C_Map.GetMapInfo(mapId).name
+				zoneSkill = zones[mapId]
+			end
+		end
+	end
 	-- Sometimes we can trigger this before the player is in any zone
 	if not zoneText then
 		return
@@ -168,43 +257,49 @@ local function UpdateCatchInfo()
 		maxZoneSkill = zoneSkill + 95
 	end
 
-	local chance = (
-		(
-			db[char].fishingSkill + db[char].fishingBuff
-		) - zoneSkill
+	FishbringerDB.chance = (
+			db[char].fishingSkill + db[char].fishingBuff - zoneSkill
 	) * 0.01 + 0.05
 	
 	if zoneSkill < 0 then 
 		zoneSkill = 1
 	end
 	
-	if chance > 1 then 
-		chance = 1
-	elseif chance < 0 then 
-		chance = 0
+	if FishbringerDB.chance > 1 then 
+		FishbringerDB.chance = 1
+	elseif FishbringerDB.chance < 0 then 
+		FishbringerDB.chance = 0
 	end
 
 	local color
-	if chance == 0 then
+	if FishbringerDB.chance == 0 then
 		color = "ffff2020"
-	elseif chance <= 0.5 then 
+	elseif FishbringerDB.chance <= 0.5 then 
 		color = "ffff8040"
-	elseif chance < 1 then 
+	elseif FishbringerDB.chance < 1 then 
 		color = "ffffff00"
 	else
 		color = "ff40bf40"
 	end
-	Fishbringer.zoneInfo:SetFormattedText(
-		"\124c%s%s\124r\n%d skill needed to fish\n(%d needed for 100%% catch rate)",
-		color, zoneText, zoneSkill, maxZoneSkill, chance * 100
-	)
-	Fishbringer.catchRate:SetFormattedText("%d%% catch rate", chance * 100)
+	if zoneSkill == 0 then
+		Fishbringer.zoneInfo:SetFormattedText(
+			L["\124c%s%s\124r\nNo fish in this zone"],
+			color, zoneText, zoneSkill, maxZoneSkill, FishbringerDB.chance * 100
+		)
+		Fishbringer.catchRate:SetText("")
+	else
+		Fishbringer.zoneInfo:SetFormattedText(
+			L["\124c%s%s\124r\n%d skill needed to fish\n(%d needed for 100%% catch rate)"],
+			color, zoneText, zoneSkill, maxZoneSkill, FishbringerDB.chance * 100
+		)
+		Fishbringer.catchRate:SetFormattedText(L["%d%% catch rate"], FishbringerDB.chance * 100)
+	end
 end
 
 local function GetFishingSkill()
 	for i = 1, GetNumSkillLines() do
 		local skillName, _, _, skillRank, _, skillModifier, skillMaxRank, _, _, _, _, _, _= GetSkillLineInfo(i)
-		if skillName == "Fishing" then 
+		if skillName == L["Fishing"] then 
 			return skillRank, skillModifier, skillMaxRank
 		end
 	end
@@ -227,18 +322,28 @@ local function UpdateSkill(forceResetFishCounter)
 	local skillRankText = skillRank
 
 	local fishNeeded = GetNumFishToLevel(skillRank)
-	if skillRank ~= skillMaxRank then 
-		skillRankText = string.format("%d/%d", skillRank, skillMaxRank)
-		fishNeededText = string.format("\n%d fish needed to skill up", fishNeeded)
+	local strFishNeeded
+	if skillRank ~= skillMaxRank then
+		skillRankText = string.format("%d(%d)", skillRank, skillMaxRank)
+		if fishNeeded>1 then
+			if fishNeeded<10 then
+				strFishNeeded = string.format("%d-%d",fishNeeded-1, fishNeeded)
+			else
+				strFishNeeded = string.format("%d-%d",fishNeeded-1, fishNeeded+1)
+			end
+		else
+			strFishNeeded = string.format("%d", fishNeeded)
+		end
+		fishNeededText = string.format(L["\n%s fish needed to skill up"], strFishNeeded)
 	end
 
 	local skillModifierText = ""
 	if skillModifier > 0 then
-		skillModifierText = string.format(" (+%d)", skillModifier)
+		skillModifierText = string.format("+%d = %d", skillModifier, skillRank+skillModifier)
 	end
 		
 	Fishbringer.content:SetFormattedText(
-		"%s%s fishing skill%s",
+		L["%s%s fishing skill%s"],
 		skillRankText,
 		skillModifierText,
 		fishNeededText
@@ -247,6 +352,7 @@ local function UpdateSkill(forceResetFishCounter)
 	if forceResetFishCounter or db[char].fishingSkill ~= skillRank then
 		db[char].fishingSkill = skillRank
 		ResetFishCounter(fishNeeded)
+		UpdateCatchInfo()
 	end
 	
 	if db[char].fishingBuff ~= skillModifier then
@@ -300,7 +406,7 @@ end
 
 local function CheckForFishingPole() 
 	local _, _, itemid = string.find(GetInventoryItemLink("player", GetInventorySlotInfo("MainHandSlot")) or "", "item:(%d+):(.+)")
-	if db[char].isShown or fishingpoles[tonumber(itemid)] then
+	if fishingpoles[tonumber(itemid)] then
 		Update()
 		Fishbringer:Show()
 		db[char].isShown = true
@@ -316,7 +422,7 @@ local function InitializeDB(resetDatabase)
 		db = {}
 		FishbringerDB = db
 	end
-
+	populateAreaTable()
 	if resetDatabase or not db[char] then 
 		db[char] = {
 			fishingSkill = 0, 
@@ -326,9 +432,30 @@ local function InitializeDB(resetDatabase)
 			maxFishingSkill = 0,
 			isShown = false,
 			isFishCountShown = true,
-			alignment = "RIGHT"
+			alignment = "RIGHT",
+			isGradiant = true,
 		}
 	end
+end
+
+local function setTitleText()
+
+	local name
+	if db[char].isGradiant == nil then
+		db[char].isGradiant = true
+	end
+	if db[char].isGradiant then
+		name = "|cff0000ffF|cff0049ffi|cff0069ffs|cff0083ffh|cff0099ffb|cff00acffr|cff00bfffi|cff00d0ffn|cff00e1ffg|cff00f0ffe|cff00ffffr"
+	else
+		name = "Fishbringer"
+	end
+	Fishbringer.title:SetText(name)
+
+end
+
+local function toggleColor()
+	db[char].isGradiant=not db[char].isGradiant
+	setTitleText()
 end
 
 local function InitializeFrame()
@@ -336,12 +463,14 @@ local function InitializeFrame()
 	if Fishbringer then
 		return
 	end
-	Fishbringer = CreateFrame("Frame", "Fishbringer", UIParent)
+
+	local Fishbringer = CreateFrame("Frame", "Fishbringer", UIParent, "BackdropTemplate")
+
 	Fishbringer:EnableMouse(true)
 	Fishbringer:SetMovable(true)
 	Fishbringer:SetUserPlaced(true)
 	Fishbringer:SetHeight(150)
-	Fishbringer:SetWidth(185)
+	Fishbringer:SetWidth(250)
 	Fishbringer:SetBackdrop({
 		bgFile = "Interface\\ChatFrame\\ChatFrameBackground", 
 		tile = true, 
@@ -377,14 +506,9 @@ local function InitializeFrame()
 	title:SetJustifyH(db[char].alignment)
 	title:SetFont(FONT, 16)
 	title:SetShadowOffset(1, -1)
-	local name
-	if random(100) < 5 then 
-		name = "Corrupted Fishbringer"
-	else
-		name = "Fishbringer"
-	end
-	title:SetText(name)
+
 	Fishbringer.title = title
+	setTitleText()
 
 	local zoneInfo = Fishbringer:CreateFontString(nil, "OVERLAY")
 	zoneInfo:SetHeight(50)
@@ -427,7 +551,7 @@ local function InitializeFrame()
 	end
 end
 
-function UpdateFishingSkill()
+local function UpdateFishingSkill()
 	return UpdateSkill(false)
 end
 
@@ -448,19 +572,21 @@ fb.ADDON_LOADED = function(self, event, addon)
 	InitializeFrame()
 end
 
-fb.COMBAT_LOG_EVENT = UpdateSkill
-fb.SKILL_LINES_CHANGED = UpdateSkill
-fb.LOOT_OPENED = IncrementFishCount
+fb.COMBAT_LOG_EVENT = UpdateFishingSkill
+fb.SKILL_LINES_CHANGED = UpdateFishingSkill
+fb.LOOT_READY = IncrementFishCount
+fb.LOOT_CLOSED = LootClosed
 fb.ZONE_CHANGED_NEW_AREA = UpdateCatchInfo
 fb.ZONE_CHANGED = UpdateCatchInfo
 fb.UNIT_INVENTORY_CHANGED = CheckForFishingPole
 
 local function ShowHelp()
-	Print("Nat Pagle would be proud of you.")
-	Print("- /fishbringer show - Toggles visibility.")
-	Print("- /fishbringer align - Cycles through text alignment.")
-	Print("- /fishbringer count - Toggles fish count visibility.")
-	Print("- /fishbringer reset - Resets the fish database.")
+	Print(L["Nat Pagle would be proud of you."])
+	Print(L["- /fishbringer show - Toggles visibility."])
+	Print(L["- /fishbringer align - Cycles through text alignment."])
+	Print(L["- /fishbringer count - Toggles fish count visibility."])
+	Print(L["- /fishbringer reset - Resets the fish database."])
+	Print(L["- /fishbringer color - Enables/disables gradient color."])
 end
 
 SlashCmdList["FISHBRINGER"] = function(arg)
@@ -475,12 +601,17 @@ SlashCmdList["FISHBRINGER"] = function(arg)
 		UpdateSkill(true)
 		UpdateCatchInfo()
 		return
+	elseif arg == "color" then
+		toggleColor()
+		return
 	end
 	return ShowHelp()
 end
+
 SLASH_FISHBRINGER1 = "/fishbringer"
 -- Hail to Fishing Buddy!
-if not select(4, GetAddOnInfo"Fishing Buddy") then
+if not select(4, GetAddOnInfo"FishingBuddy") then
 	SLASH_FISHBRINGER2 = "/fb"
 end
-Print("Pack yer bags, we be leavin' fer fishin'!")
+
+Print(L["Pack yer bags, we be leavin' fer fishin'!"])
